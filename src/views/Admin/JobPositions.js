@@ -27,7 +27,6 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCollapse,
   CBadge,
   CTooltip
 } from "@coreui/react-pro";
@@ -42,7 +41,7 @@ import {
   cilChevronTop,
   cilChevronBottom,
   cilCheckCircle,
-  cilWarning ,
+  cilWarning,
   cilUser
 } from "@coreui/icons";
 import { BASE_URL } from '../../config'; 
@@ -77,6 +76,21 @@ const JobPositions = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterJobType, setFilterJobType] = useState("all");
+
+  const formatSalary = (amount) => {
+    if (amount === undefined || amount === null) return '₹0';
+    
+    const numericAmount = typeof amount === 'string' 
+      ? parseFloat(amount.replace(/[^0-9.-]+/g, '')) 
+      : Number(amount);
+    
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(numericAmount);
+  };
 
   useEffect(() => {
     fetchJobPositions();
@@ -114,6 +128,7 @@ const JobPositions = () => {
       console.error("Error:", error);
     }
   };
+
   const openModal = (job = null) => {
     setCurrentJob(
       job || {
@@ -150,7 +165,7 @@ const JobPositions = () => {
       setCurrentJob(prev => ({ 
         ...prev, 
         [name]: files[0],
-        image_url: "" // Clear image_url when new file is selected
+        image_url: ""
       }));
     } else {
       setCurrentJob(prev => ({ ...prev, [name]: value }));
@@ -197,10 +212,9 @@ const JobPositions = () => {
     setIsLoading(true);
 
     const url = isEditMode
-    ? `${BASE_URL}/job-positions/${currentJob.id}`
-    : `${BASE_URL}/job-positions/`;
-  const method = isEditMode ? "PUT" : "POST";
-
+      ? `${BASE_URL}/job-positions/${currentJob.id}`
+      : `${BASE_URL}/job-positions/`;
+    const method = isEditMode ? "PUT" : "POST";
 
     const formData = new FormData();
     formData.append("title", currentJob.title);
@@ -211,11 +225,9 @@ const JobPositions = () => {
     formData.append("job_type", currentJob.job_type);
     formData.append("status", currentJob.status);
 
-    // Handle image upload
     if (currentJob.image) {
       formData.append("image", currentJob.image);
     } else if (isEditMode && currentJob.image_url) {
-      // Keep existing image if no new image is selected
       formData.append("image_url", currentJob.image_url);
     }
 
@@ -273,29 +285,20 @@ const JobPositions = () => {
     return matchesSearch && matchesStatus && matchesJobType;
   });
 
-  const formatSalary = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
-
   return (
     <div className="job-positions-container">
       <CCard>
-      <CCardHeader className="d-flex justify-content-between align-items-center bg-white">
-  <div>
-    <h4 className="mb-0"   > <CIcon icon={cilUser} className="me-2 text-primary" />
-      Job Positions Management</h4>
-    <p className="text-muted mb-0">Manage all job positions in your organization</p>
-  </div>
-  <CButton style={{ backgroundColor: "#f0e70c" }} onClick={() => openModal()} className="rounded-pill">
-    <CIcon icon={cilPlus} className="me-2" />
-    Add New Position
-  </CButton>
-</CCardHeader>
+        <CCardHeader className="d-flex justify-content-between align-items-center bg-white">
+          <div>
+            <h4 className="mb-0"><CIcon icon={cilUser} className="me-2 text-primary" />
+              Job Positions Management</h4>
+            <p className="text-muted mb-0">Manage all job positions in your organization</p>
+          </div>
+          <CButton style={{ backgroundColor: "#f0e70c" }} onClick={() => openModal()} className="rounded-pill">
+            <CIcon icon={cilPlus} className="me-2" />
+            Add New Position
+          </CButton>
+        </CCardHeader>
         <CCardBody>
           <CToaster placement="top-end">
             <CToast visible={toast.visible} color={toast.color} className="text-white">
@@ -341,7 +344,6 @@ const JobPositions = () => {
                 <option value="part_time">Part Time</option>
               </CFormSelect>
             </CCol>
-         
           </CRow>
 
           {isTableLoading ? (
@@ -423,44 +425,41 @@ const JobPositions = () => {
                         )}
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-  <div className="d-flex justify-content-center">
-    <CTooltip content="View Details">
-      <CButton
-        color="info"
-        variant="outline"
-      
-        size="sm"
-        onClick={() => openViewModal(job)}
-        className="me-2"
-      >
-        <CIcon icon={cilInfo} />
-      </CButton>
-    </CTooltip>
-    <CTooltip content="Edit">
-      <CButton
-        color="warning"
-        variant="outline"
-        
-        size="sm"
-        onClick={() => openModal(job)}
-        className="me-2"
-      >
-        <CIcon icon={cilPencil} />
-      </CButton>
-    </CTooltip>
-    <CTooltip content="Delete">
-      <CButton
-        color="danger"
-        variant="outline"
-       
-        size="sm"
-        onClick={() => handleDelete(job.id)}
-      >
-        <CIcon icon={cilTrash} />
-      </CButton>
-    </CTooltip>
-  </div>
-</CTableDataCell>
+                        <div className="d-flex justify-content-center">
+                          <CTooltip content="View Details">
+                            <CButton
+                              color="info"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => openViewModal(job)}
+                              className="me-2"
+                            >
+                              <CIcon icon={cilInfo} />
+                            </CButton>
+                          </CTooltip>
+                          <CTooltip content="Edit">
+                            <CButton
+                              color="warning"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => openModal(job)}
+                              className="me-2"
+                            >
+                              <CIcon icon={cilPencil} />
+                            </CButton>
+                          </CTooltip>
+                          <CTooltip content="Delete">
+                            <CButton
+                              color="danger"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(job.id)}
+                            >
+                              <CIcon icon={cilTrash} />
+                            </CButton>
+                          </CTooltip>
+                        </div>
+                      </CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>
@@ -500,11 +499,10 @@ const JobPositions = () => {
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
-                  label="Minimum Salary"
+                  label="Minimum Salary (₹)"
                   name="min_salary"
                   type="number"
                   min="0"
-                  step="0.01"
                   value={currentJob.min_salary}
                   onChange={handleChange}
                   required
@@ -513,11 +511,10 @@ const JobPositions = () => {
               </CCol>
               <CCol md={6}>
                 <CFormInput
-                  label="Maximum Salary"
+                  label="Maximum Salary (₹)"
                   name="max_salary"
                   type="number"
                   min="0"
-                  step="0.01"
                   value={currentJob.max_salary}
                   onChange={handleChange}
                   required
@@ -666,7 +663,9 @@ const JobPositions = () => {
               <CRow className="mb-3">
                 <CCol md={12}>
                   <h6>Salary Range</h6>
-                  <p>{formatSalary(viewJob.min_salary)} - {formatSalary(viewJob.max_salary)}</p>
+                  <p>
+                    {formatSalary(viewJob.min_salary)} - {formatSalary(viewJob.max_salary)}
+                  </p>
                 </CCol>
               </CRow>
 

@@ -1,7 +1,11 @@
 version: "3.8"
+
 services:
   frontend:
     build:
-      context: .       # root is the context now
+      context: .              # use current directory
+      dockerfile: dockerfile  # explicitly specify dockerfile name (lowercase)
+    container_name: banjos-frontend
     ports:
-      - "3000:80"
+      - "3004:80"             # expose on port 3004
+    restart: always

@@ -230,7 +230,7 @@ const AdminDashboard = () => {
                           {request.requested_city}, {request.requested_country}
                         </CTableDataCell>
                         <CTableDataCell>
-                          ${request.investment_budget.toLocaleString()}
+                          {request.investment_budget.toLocaleString()}
                         </CTableDataCell>
                         <CTableDataCell>
                           {format(new Date(request.created_at), 'MMM dd, yyyy')}

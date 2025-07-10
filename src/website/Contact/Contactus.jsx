@@ -111,21 +111,21 @@ const Contact = () => {
                 <i className="bi bi-geo-alt flex-shrink-0" style={{ color: '#f0e70c', fontSize: '1.5rem' }}></i>
                 <div style={{ marginLeft: '15px' }}>
                   <h4 style={{ color: '#333' }}>Location:</h4>
-                  <p style={{ color: '#555' }}>A108 Adam Street, New York, NY 535022</p>
+                  <p style={{ color: '#555' }}>Plot No 62, Lane No 4 Pandit Colony, Nashik 422002</p>
                 </div>
               </div>
               <div className="info-item d-flex mt-4">
                 <i className="bi bi-envelope flex-shrink-0" style={{ color: '#f0e70c', fontSize: '1.5rem' }}></i>
                 <div style={{ marginLeft: '15px' }}>
                   <h4 style={{ color: '#333' }}>Email:</h4>
-                  <p style={{ color: '#555' }}>info@example.com</p>
+                  <p style={{ color: '#555' }}>banjosthefoodchain@gmail.com</p>
                 </div>
               </div>
               <div className="info-item d-flex mt-4">
                 <i className="bi bi-phone flex-shrink-0" style={{ color: '#f0e70c', fontSize: '1.5rem' }}></i>
                 <div style={{ marginLeft: '15px' }}>
                   <h4 style={{ color: '#333' }}>Call:</h4>
-                  <p style={{ color: '#555' }}>+1 5589 55488 55</p>
+                  <p style={{ color: '#555' }}>+91 9112222066</p>
                 </div>
               </div>
             </div>
